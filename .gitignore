@@ -32,5 +32,8 @@
 *.dSYM/
 *.su
 
+# build directory
+build/
+
 # binary
 garp
