@@ -1,0 +1,4 @@
+
+/* the configured options and settings for garp */
+#define garp_VERSION_MAJOR @garp_VERSION_MAJOR@
+#define garp_VERSION_MINOR @garp_VERSION_MINOR@
