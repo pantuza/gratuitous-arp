@@ -5,4 +5,15 @@ project (garp)
 set (garp_VERSION_MAJOR 0)
 set (garp_VERSION_MINOR 1)
 
+
+# Configure a header file to pass some of the CMake settings to the source code
+configure_file (
+  "${PROJECT_SOURCE_DIR}/garp_config.h.in"
+  "${PROJECT_BINARY_DIR}/garp_config.h"
+  )
+
+
+# add the binary tree to the search path for finding garp_config.h
+include_directories("${PROJECT_BINARY_DIR}")
+
 add_executable(garp garp.c)
