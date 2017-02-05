@@ -21,4 +21,19 @@
 
 
 
+/**
+ * Only variable values for this program. As we always send a ARP reply, other
+ * protocol fields does not change.
+ */
+struct gratuitous_arp {
+
+    char source_eth_addr[ETHERNET_ADDR_LEN];  /* Source Ethernet address */
+    char source_ip_addr[IP_ADDR_LEN];  /* Source IP address */
+
+    char target_eth_addr[ETHERNET_ADDR_LEN];  /* Target Ethernet address */
+    char target_ip_addr[IP_ADDR_LEN];  /* Target IP address */
+};
+
+
+
 #endif /* GARP_H */
