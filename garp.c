@@ -17,6 +17,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <netdb.h>
+#include <sys/socket.h>
+
+#include "garp.h"
 
 void
 usage ()
@@ -38,7 +42,18 @@ main (int argc, char* argv[])
 
     fprintf(stdout, "Sending gratuitous ARP..\n");
 
-    /* Do stuff */
+    /* Structs to store source and target addresses */
+    struct in_addr source_addr;
+    struct in_addr target_addr;
+
+    /* The Gratuitous ARP packet data */
+    struct gratuitous_arp packet;
+
+    /* The socket used to send packet on network */
+    struct sockaddr socket_address;
+
+    /* File descriptor of the socket local socket */
+    int socket_fd;
 
     return EXIT_SUCCESS;
 }
