@@ -23,13 +23,16 @@
 #include <linux/if_ether.h>
 
 #include "garp.h"
+#include "garp_config.h"
 
 void
 usage ()
 {
     fprintf(stdout,
+        "Gratuitous ARP %d.%d\n\n"
         "Usage: garp iface addr\n"
-        "Example: garp eth0 192.168.1.42\n"
+        "Example: garp eth0 192.168.1.42\n",
+        garp_VERSION_MAJOR, garp_VERSION_MINOR
     );
 }
 
