@@ -20,6 +20,8 @@
 #include <netdb.h>
 #include <sys/socket.h>
 
+#include <linux/if_ether.h>
+
 #include "garp.h"
 
 void
@@ -54,6 +56,13 @@ main (int argc, char* argv[])
 
     /* File descriptor of the socket local socket */
     int socket_fd;
+
+    /* Tries to create a socket */
+    socket_fd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_RARP));
+    if(socket_fd < 0) {
+        fprintf(stderr, "Error on creating socket");
+        return EXIT_FAILURE;
+    }
 
     return EXIT_SUCCESS;
 }
