@@ -36,7 +36,7 @@ usage ()
         "Gratuitous ARP %d.%d\n\n"
         "Usage: garp iface addr\n"
         "Example: garp eth0 192.168.1.42\n",
-        garp_VERSION_MAJOR, garp_VERSION_MINOR
+        GARP_VERSION_MAJOR, GARP_VERSION_MINOR
     );
 }
 
