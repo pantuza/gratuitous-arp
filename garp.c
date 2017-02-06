@@ -83,6 +83,9 @@ main (int argc, char* argv[])
     /* Sets the interface in which packet will leave */
     strncpy(socket_address.sa_data, iface, strlen(iface));
 
+    /* Sets the IP address that we will fake */
+    set_ip(&source_addr, argv[2]);
+
     /* Tries to create a socket */
     socket_fd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_RARP));
     if(socket_fd < 0) {
