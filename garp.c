@@ -20,6 +20,7 @@
 
 #include <netdb.h>
 #include <sys/socket.h>
+#include <arpa/inet.h>
 
 #include <linux/if_ether.h>
 
@@ -41,6 +42,12 @@ void
 set_iface (char iface[25], char *argv_iface)
 {
     strncpy(iface, argv_iface, strlen(argv_iface));
+}
+
+void
+set_ip (struct in_addr* source_addr, char* argv_addr)
+{
+    source_addr->s_addr = inet_addr(argv_addr);
 }
 
 int
