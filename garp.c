@@ -54,6 +54,9 @@ main (int argc, char* argv[])
 
     fprintf(stdout, "Sending gratuitous ARP..\n");
 
+    /* Interface name used to send packet */
+    char iface[25];
+
     /* Structs to store source and target addresses */
     struct in_addr source_addr;
     struct in_addr target_addr;
@@ -66,6 +69,12 @@ main (int argc, char* argv[])
 
     /* File descriptor of the socket local socket */
     int socket_fd;
+
+    /* Sets interface name from program arguments */
+    set_iface(iface, argv[1]);
+
+    /* Sets the interface in which packet will leave */
+    strncpy(socket_address.sa_data, iface, strlen(iface));
 
     /* Tries to create a socket */
     socket_fd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_RARP));
