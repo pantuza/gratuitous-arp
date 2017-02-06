@@ -16,6 +16,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <netdb.h>
 #include <sys/socket.h>
@@ -34,6 +35,12 @@ usage ()
         "Example: garp eth0 192.168.1.42\n",
         garp_VERSION_MAJOR, garp_VERSION_MINOR
     );
+}
+
+void
+set_iface (char iface[25], char *argv_iface)
+{
+    strncpy(iface, argv_iface, strlen(argv_iface));
 }
 
 int
