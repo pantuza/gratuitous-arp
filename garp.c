@@ -20,6 +20,7 @@
 
 #include <netdb.h>
 #include <sys/socket.h>
+#include <sys/ioctl.h>
 #include <arpa/inet.h>
 
 #include <linux/if_ether.h>
@@ -48,6 +49,27 @@ void
 set_ip (struct in_addr* source_addr, char* argv_addr)
 {
     source_addr->s_addr = inet_addr(argv_addr);
+}
+
+void
+get_mac_address (char source_eth_addr[ETHERNET_ADDR_LEN], char* iface)
+{
+    struct ifreq ethernet;
+    strncpy(ethernet.ifr_name, iface, strlen(iface));
+    int file_descriptor = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
+
+    if(ioctl(file_descriptor, SIOCGIFHWADDR, ethernet) == -1) {
+        fprintf(stderr, "Error: Cannot get ethernet address\n");
+        exit(1);
+    } else {
+        char* mac = (char *) ethernet.ifr_hwaddr.sa_data;
+        sprintf(
+            source_eth_addr,
+            "%.2X:%.2X:%.2X:%.2X:%.2X:%.2X",
+            mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]
+        );
+    }
+    close(file_descriptor);
 }
 
 int
