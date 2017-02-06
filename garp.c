@@ -116,5 +116,8 @@ main (int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
+    /* Closes the socket */
+    close(socket_fd);
+
     return EXIT_SUCCESS;
 }
