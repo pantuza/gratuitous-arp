@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include <netdb.h>
 #include <sys/socket.h>
@@ -59,14 +60,15 @@ get_mac_address (char source_eth_addr[ETHERNET_ADDR_LEN], char* iface)
     strncpy(ethernet.ifr_name, iface, strlen(iface));
     int file_descriptor = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
 
-    if(ioctl(file_descriptor, SIOCGIFHWADDR, ethernet) == -1) {
+    if(ioctl(file_descriptor, SIOCGIFHWADDR, &ethernet) == -1) {
         fprintf(stderr, "Error: Cannot get ethernet address\n");
+        fprintf(stderr, strerror(errno));
         exit(1);
     } else {
-        char* mac = (char *) ethernet.ifr_hwaddr.sa_data;
+        unsigned char* mac = (unsigned char *) ethernet.ifr_hwaddr.sa_data;
         sprintf(
             source_eth_addr,
-            "%.2X:%.2X:%.2X:%.2X:%.2X:%.2X",
+            "%.2X%.2X%.2X%.2X%.2X%.2X",
             mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]
         );
     }
