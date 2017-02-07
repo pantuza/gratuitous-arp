@@ -2,8 +2,9 @@
 cmake_minimum_required (VERSION 2.6)
 project (garp)
 
+# Sets major and minor versions
 set (garp_VERSION_MAJOR 0)
-set (garp_VERSION_MINOR 1)
+set (garp_VERSION_MINOR 2)
 
 
 # Configure a header file to pass some of the CMake settings to the source code
