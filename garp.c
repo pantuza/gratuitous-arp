@@ -89,6 +89,10 @@ main (int argc, char* argv[])
     /* Interface name used to send packet */
     char iface[25];
 
+    /* Source and destination hardware (Ethernet) address */
+    char source_hardware_address[ETHERNET_ADDR_LEN];
+    char target_hardware_address[ETHERNET_ADDR_LEN];
+
     /* Structs to store source and target addresses */
     struct in_addr source_addr;
     struct in_addr target_addr;
@@ -110,6 +114,9 @@ main (int argc, char* argv[])
 
     /* Sets the IP address that we will fake */
     set_ip(&source_addr, argv[2]);
+
+	/* Gets the local interface hardware (Ethernet) address */
+    get_mac_address(source_hardware_address, iface);
 
     /* Tries to create a socket */
     socket_fd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_RARP));
