@@ -6,6 +6,8 @@ project (garp)
 set (garp_VERSION_MAJOR 0)
 set (garp_VERSION_MINOR 2)
 
+# Sets parameter std=gnu99
+SET(CMAKE_C_FLAGS "-std=gnu99" CACHE STRING "" FORCE)
 
 # Configure a header file to pass some of the CMake settings to the source code
 configure_file (
