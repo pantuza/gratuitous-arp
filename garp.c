@@ -119,6 +119,14 @@ main (int argc, char* argv[])
     packet.protocol_address_length = IP_ADDR_LEN;
     packet.arp_options = htons(REQUEST_OPERATION);
 
+    /* Gets the local interface hardware (Ethernet) address */
+    get_mac_address(packet.source_hardware_address, iface);
+    memcpy(packet.source_protocol_address, &source_ip_address, IP_ADDR_LEN);
+
+    memset(packet.target_hardware_address, 0xFF, ETHERNET_ADDR_LEN);
+    memcpy(packet.target_protocol_address, &source_ip_address, IP_ADDR_LEN);
+
+    //memcpy(buffer, &packet, sizeof(packet));
 
     /* Closes the socket */
     close(socket_fd);
