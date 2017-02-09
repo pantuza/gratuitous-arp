@@ -128,6 +128,17 @@ main (int argc, char* argv[])
 
     //memcpy(buffer, &packet, sizeof(packet));
 
+    /* Sends the packet out */
+    int ok = sendto(socket_fd, &packet, sizeof(packet), 0, &socket_address, sizeof(socket_address));
+
+    if(!ok) {
+        fprintf(stderr, "Error on sending packet");
+        fprintf(stderr, strerror(errno));
+        return EXIT_FAILURE;
+    } else {
+        fprintf(stdout, "Packet: %s\n", &packet);
+    }
+
     /* Closes the socket */
     close(socket_fd);
 
