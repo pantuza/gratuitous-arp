@@ -17,7 +17,7 @@
 #define IP_ADDR_LEN 4
 
 /* ARP option to express reply */
-#define REPLY_OPERATION 2
+#define REQUEST_OPERATION 1
 
 
 
