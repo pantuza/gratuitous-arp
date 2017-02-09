@@ -27,11 +27,19 @@
  */
 struct gratuitous_arp {
 
-    char source_eth_addr[ETHERNET_ADDR_LEN];  /* Source Ethernet address */
-    char source_ip_addr[IP_ADDR_LEN];  /* Source IP address */
+    unsigned char hardware_type;
+    unsigned char protocol_type;
 
-    char target_eth_addr[ETHERNET_ADDR_LEN];  /* Target Ethernet address */
-    char target_ip_addr[IP_ADDR_LEN];  /* Target IP address */
+    unsigned short hardware_address_length;
+    unsigned short protocol_address_length;
+
+    unsigned char arp_options;
+
+    unsigned char source_hardware_address[ETHERNET_ADDR_LEN];
+    unsigned char source_protocol_address[IP_ADDR_LEN];
+
+    unsigned char target_hardware_address[ETHERNET_ADDR_LEN];
+    unsigned char target_protocol_address[IP_ADDR_LEN];
 };
 
 
