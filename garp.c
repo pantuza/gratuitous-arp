@@ -112,6 +112,14 @@ main (int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
+    /* Copy data into ARP packet buffer */
+    packet.hardware_type = htons(ETHERNET_TYPE);
+    packet.protocol_type = htons(IP_TYPE);
+    packet.hardware_address_length = ETHERNET_ADDR_LEN;
+    packet.protocol_address_length = IP_ADDR_LEN;
+    packet.arp_options = htons(REQUEST_OPERATION);
+
+
     /* Closes the socket */
     close(socket_fd);
 
