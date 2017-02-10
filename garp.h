@@ -5,7 +5,7 @@
 
 
 /* Our implementation uses Ethernet as the ARP hardware type */
-#define ETHERNET_TYPE 0x0806
+#define ETHERNET_TYPE 0x0001
 
 /* When ARP hardware type is Ethernet its address needs 6 bytes of storage */
 #define ETHERNET_ADDR_LEN 6
@@ -27,13 +27,13 @@
  */
 struct gratuitous_arp {
 
-    unsigned char hardware_type;
-    unsigned char protocol_type;
+    unsigned short hardware_type;
+    unsigned short protocol_type;
 
-    unsigned short hardware_address_length;
-    unsigned short protocol_address_length;
+    unsigned char hardware_address_length;
+    unsigned char protocol_address_length;
 
-    unsigned char arp_options;
+    unsigned short arp_options;
 
     unsigned char source_hardware_address[ETHERNET_ADDR_LEN];
     unsigned char source_protocol_address[IP_ADDR_LEN];
