@@ -83,6 +83,22 @@ print_raw_packet (struct gratuitous_arp *packet, unsigned int packet_len)
     fprintf(stdout, "\n");
 }
 
+void
+send_gratuitous_arp (int socket_fd, struct gratuitous_arp* arp,
+                     struct sockaddr* addr)
+{
+    int ok = sendto(socket_fd, arp, sizeof(*arp), 0, addr, sizeof(*addr));
+
+    if(!ok) {
+        fprintf(stderr, "Error on sending packet");
+        fprintf(stderr, strerror(errno));
+        exit(EXIT_FAILURE);
+    } else {
+        fprintf(stdout, "Packet sent: %s\n", arp);
+    }
+
+}
+
 int
 main (int argc, char* argv[])
 {
@@ -143,15 +159,7 @@ main (int argc, char* argv[])
     print_raw_packet(&packet, sizeof(packet));
 
     /* Sends the packet out */
-    int ok = sendto(socket_fd, &packet, sizeof(packet), 0, &socket_address, sizeof(socket_address));
-
-    if(!ok) {
-        fprintf(stderr, "Error on sending packet");
-        fprintf(stderr, strerror(errno));
-        return EXIT_FAILURE;
-    } else {
-        fprintf(stdout, "Packet: %s\n", &packet);
-    }
+    send_gratuitous_arp(socket_fd, &packet, &socket_address);
 
     /* Closes the socket */
     close(socket_fd);
