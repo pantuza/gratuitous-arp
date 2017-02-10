@@ -94,6 +94,7 @@ send_gratuitous_arp (int socket_fd, struct gratuitous_arp* arp,
         fprintf(stderr, strerror(errno));
         exit(EXIT_FAILURE);
     } else {
+        /* Create function to pretty print network packet */
         fprintf(stdout, "Packet sent: %s\n", arp);
     }
 
