@@ -70,6 +70,19 @@ get_mac_address (unsigned char source_eth_addr[ETHERNET_ADDR_LEN], char* iface)
     close(file_descriptor);
 }
 
+void
+print_raw_packet (struct gratuitous_arp *packet, unsigned int packet_len)
+{
+    char buffer[packet_len];
+
+    memcpy(buffer, packet, packet_len);
+
+    for(int i = 0; i < packet_len; i++) {
+        fprintf(stdout, "%.2X ", buffer[i] & 0xff);
+    }
+    fprintf(stdout, "\n");
+}
+
 int
 main (int argc, char* argv[])
 {
@@ -126,12 +139,8 @@ main (int argc, char* argv[])
     memset(packet.target_hardware_address, 0xFF, ETHERNET_ADDR_LEN);
     memcpy(packet.target_protocol_address, &source_ip_address, IP_ADDR_LEN);
 
-    char buffer[sizeof(packet)];
-    memcpy(buffer, &packet, sizeof(packet));
-    for(int i =0; i < sizeof(packet); i++) {
-        printf("%.2X ", buffer[i] & 0xff);
-    }
-    puts("\n");
+    /* Debug hex decimal data */
+    print_raw_packet(&packet, sizeof(packet));
 
     /* Sends the packet out */
     int ok = sendto(socket_fd, &packet, sizeof(packet), 0, &socket_address, sizeof(socket_address));
