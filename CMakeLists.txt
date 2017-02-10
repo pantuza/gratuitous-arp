@@ -4,7 +4,7 @@ project (garp)
 
 # Sets major and minor versions
 set (garp_VERSION_MAJOR 0)
-set (garp_VERSION_MINOR 2)
+set (garp_VERSION_MINOR 3)
 
 # Sets parameter std=gnu99
 SET(CMAKE_C_FLAGS "-std=gnu99" CACHE STRING "" FORCE)
