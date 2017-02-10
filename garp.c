@@ -126,7 +126,12 @@ main (int argc, char* argv[])
     memset(packet.target_hardware_address, 0xFF, ETHERNET_ADDR_LEN);
     memcpy(packet.target_protocol_address, &source_ip_address, IP_ADDR_LEN);
 
-    //memcpy(buffer, &packet, sizeof(packet));
+    char buffer[sizeof(packet)];
+    memcpy(buffer, &packet, sizeof(packet));
+    for(int i =0; i < sizeof(packet); i++) {
+        printf("%.2X ", buffer[i] & 0xff);
+    }
+    puts("\n");
 
     /* Sends the packet out */
     int ok = sendto(socket_fd, &packet, sizeof(packet), 0, &socket_address, sizeof(socket_address));
