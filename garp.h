@@ -19,7 +19,8 @@
 /* ARP option to express reply */
 #define REQUEST_OPERATION 1
 
-
+/* Size for the padding data */
+#define ARP_PADDING_SIZE 18
 
 /**
  * Only variable values for this program. As we always send a ARP reply, other
@@ -40,6 +41,8 @@ struct gratuitous_arp {
 
     unsigned char target_hardware_address[ETHERNET_ADDR_LEN];
     unsigned char target_protocol_address[IP_ADDR_LEN];
+
+    unsigned char padding[ARP_PADDING_SIZE];
 };
 
 
