@@ -159,6 +159,9 @@ main (int argc, char* argv[])
     memset(packet.target_hardware_address, 0xFF, ETHERNET_ADDR_LEN);
     memcpy(packet.target_protocol_address, &source_ip_address, IP_ADDR_LEN);
 
+    /* Just adding extra padding data */
+    memset(packet.padding, 0, ARP_PADDING_SIZE);
+
     /* Debug hex decimal data */
     print_raw_packet(&packet, sizeof(packet));
 
