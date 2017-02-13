@@ -65,7 +65,10 @@ get_mac_address (unsigned char source_eth_addr[ETHERNET_ADDR_LEN], char* iface)
         fprintf(stderr, strerror(errno));
         exit(1);
     } else {
-        source_eth_addr = (unsigned char *) ethernet.ifr_hwaddr.sa_data;
+        sprintf(
+            source_eth_addr, "%s",
+            (unsigned char *) ethernet.ifr_hwaddr.sa_data
+        );
     }
     close(file_descriptor);
 }
