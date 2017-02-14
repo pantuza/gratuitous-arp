@@ -26,6 +26,8 @@
 
 #include <linux/if_ether.h>
 #include <net/if.h>
+#include <linux/if_packet.h>
+#include <net/ethernet.h>
 
 #include "garp.h"
 #include "garp_config.h"
@@ -125,6 +127,9 @@ main (int argc, char* argv[])
 
     /* The socket used to send packet on network */
     struct sockaddr socket_address;
+
+    /* The link layer packet */
+    struct sockaddr_ll link_address;
 
     /* File descriptor of the socket local socket */
     int socket_fd;
