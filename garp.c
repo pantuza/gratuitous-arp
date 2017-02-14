@@ -128,7 +128,8 @@ void
 send_gratuitous_arp (int socket_fd, struct gratuitous_arp* arp,
                      struct sockaddr_ll* addr)
 {
-    int sent = sendto(socket_fd, arp, sizeof(*arp), 0, (struct sockaddr *)addr, sizeof(*addr));
+    int sent = sendto(socket_fd, arp, sizeof(*arp), 0,
+                      (struct sockaddr *) addr, sizeof(*addr));
 
     if(sent < 0) {
         fprintf(stderr, "Error on sending packet: ");
@@ -201,11 +202,13 @@ main (int argc, char* argv[])
     packet.arp_options = htons(REQUEST_OPERATION);
 
     /* Gets the local interface hardware (Ethernet) and protocol  address */
-    memcpy(packet.source_hardware_address, packet.source_ethernet_address, ETHERNET_ADDR_LEN);
+    memcpy(packet.source_hardware_address,
+           packet.source_ethernet_address, ETHERNET_ADDR_LEN);
     memcpy(packet.source_protocol_address, &source_ip_address, IP_ADDR_LEN);
 
     /* Copies the target  hardware (Ethernet) and protocol  address */
-    memcpy(packet.target_hardware_address, packet.target_ethernet_address, ETHERNET_ADDR_LEN);
+    memcpy(packet.target_hardware_address,
+           packet.target_ethernet_address, ETHERNET_ADDR_LEN);
     memcpy(packet.target_protocol_address, &source_ip_address, IP_ADDR_LEN);
 
     /* Just adding extra padding data to complete packet size */
