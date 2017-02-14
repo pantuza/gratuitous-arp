@@ -56,7 +56,8 @@ set_ip (struct in_addr* source_addr, char* argv_addr)
 }
 
 void
-get_mac_address (unsigned char source_eth_addr[ETHERNET_ADDR_LEN], char* iface)
+get_mac_address (unsigned char source_eth_addr[ETHERNET_ADDR_LEN], char* iface,
+				 int *sll_ifindex)
 {
     struct ifreq ethernet;
     strncpy(ethernet.ifr_name, iface, strlen(iface));
@@ -71,6 +72,7 @@ get_mac_address (unsigned char source_eth_addr[ETHERNET_ADDR_LEN], char* iface)
             source_eth_addr, "%s",
             (unsigned char *) ethernet.ifr_hwaddr.sa_data
         );
+		*sll_ifindex = ethernet.ifr_ifindex;
     }
     close(file_descriptor);
 }
