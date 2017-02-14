@@ -56,23 +56,21 @@ set_ip (struct in_addr* source_addr, char* argv_addr)
 }
 
 void
-get_mac_address (unsigned char source_eth_addr[ETHERNET_ADDR_LEN], char* iface,
-				 int *sll_ifindex)
+get_mac_address (struct ifreq* ethernet, char* iface,
+                 unsigned char source_eth_addr[ETHERNET_ADDR_LEN])
 {
-    struct ifreq ethernet;
-    strncpy(ethernet.ifr_name, iface, IF_NAMESIZE);
+    strncpy(ethernet->ifr_name, iface, IF_NAMESIZE);
     int file_descriptor = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
 
-    if(ioctl(file_descriptor, SIOCGIFHWADDR, &ethernet) == -1) {
+    if(ioctl(file_descriptor, SIOCGIFHWADDR, ethernet) == -1) {
         fprintf(stderr, "Error: Cannot get ethernet address\n");
         fprintf(stderr, strerror(errno));
         exit(1);
     } else {
         sprintf(
             source_eth_addr, "%s",
-            (unsigned char *) ethernet.ifr_hwaddr.sa_data
+            (unsigned char *) ethernet->ifr_hwaddr.sa_data
         );
-		*sll_ifindex = ethernet.ifr_ifindex;
     }
     close(file_descriptor);
 }
