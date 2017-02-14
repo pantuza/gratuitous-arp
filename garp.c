@@ -96,10 +96,10 @@ void
 send_gratuitous_arp (int socket_fd, struct gratuitous_arp* arp,
                      struct sockaddr_ll* addr)
 {
-    int ok = sendto(socket_fd, arp, sizeof(*arp), 0, (struct sockaddr *)addr, sizeof(*addr));
+    int sent = sendto(socket_fd, arp, sizeof(*arp), 0, (struct sockaddr *)addr, sizeof(*addr));
 
-    if(!ok) {
-        fprintf(stderr, "Error on sending packet");
+    if(sent < 0) {
+        fprintf(stderr, "Error on sending packet: ");
         fprintf(stderr, strerror(errno));
         exit(EXIT_FAILURE);
     }
