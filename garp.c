@@ -123,9 +123,6 @@ main (int argc, char* argv[])
     /* The Gratuitous ARP packet data */
     struct gratuitous_arp packet;
 
-    /* The socket used to send packet on network */
-    struct sockaddr socket_address;
-
     /* The link layer packet */
     struct sockaddr_ll link_address;
 
@@ -134,9 +131,6 @@ main (int argc, char* argv[])
 
     /* Sets interface name from program arguments */
     set_iface(iface, argv[1]);
-
-    /* Sets the interface in which packet will leave */
-    strncpy(socket_address.sa_data, iface, strlen(iface));
 
     /* Sets the IP address that we will fake */
     set_ip(&source_ip_address, argv[2]);
