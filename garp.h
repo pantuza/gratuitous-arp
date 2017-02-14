@@ -3,9 +3,11 @@
 #define GARP_H
 
 
+/* Ethernet type for Link layer header */
+#define ETHERNET_TYPE 0x806
 
 /* Our implementation uses Ethernet as the ARP hardware type */
-#define ETHERNET_TYPE 0x0001
+#define ETHERNET_ARP_TYPE 0x0001
 
 /* When ARP hardware type is Ethernet its address needs 6 bytes of storage */
 #define ETHERNET_ADDR_LEN 6
