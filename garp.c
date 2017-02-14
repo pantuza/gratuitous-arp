@@ -124,6 +124,9 @@ main (int argc, char* argv[])
     /* The link layer packet */
     struct sockaddr_ll link_address;
 
+    /* The ethernet interface */
+    struct ifreq ethernet;
+
     /* File descriptor of the socket local socket */
     int socket_fd;
 
@@ -140,14 +143,15 @@ main (int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-
-    link_address.sll_family = AF_PACKET;
-	link_address.sll_protocol = htons(ETH_P_ARP);
-
     /* Fill data for Ethernet header */
-    get_mac_address(packet.source_ethernet_address, iface, &link_address.sll_ifindex);
+    get_mac_address(&ethernet, iface, packet.source_ethernet_address);
     memset(packet.target_ethernet_address, 0xFF, ETHERNET_ADDR_LEN);
     packet.ethernet_type = htons(ETHERNET_TYPE);
+
+	/* Link layer address data */
+    link_address.sll_family = AF_PACKET;
+	link_address.sll_protocol = htons(ETH_P_ARP);
+	link_address.sll_ifindex = ethernet.ifr_ifindex;
 
     /* Copy data into ARP packet buffer */
     packet.hardware_type = htons(ETHERNET_ARP_TYPE);
