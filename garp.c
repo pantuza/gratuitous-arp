@@ -92,19 +92,15 @@ print_raw_packet (struct gratuitous_arp *packet, unsigned int packet_len)
 
 void
 send_gratuitous_arp (int socket_fd, struct gratuitous_arp* arp,
-                     struct sockaddr* addr)
+                     struct sockaddr_ll* addr)
 {
-    int ok = sendto(socket_fd, arp, sizeof(*arp), 0, addr, sizeof(*addr));
+    int ok = sendto(socket_fd, arp, sizeof(*arp), 0, (struct sockaddr *)addr, sizeof(*addr));
 
     if(!ok) {
         fprintf(stderr, "Error on sending packet");
         fprintf(stderr, strerror(errno));
         exit(EXIT_FAILURE);
-    } else {
-        /* Create function to pretty print network packet */
-        fprintf(stdout, "Packet sent: %s\n", arp);
     }
-
 }
 
 int
