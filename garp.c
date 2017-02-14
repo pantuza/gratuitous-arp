@@ -66,6 +66,10 @@ get_mac_address (struct ifreq* ethernet, char* iface,
         fprintf(stderr, "Error: Cannot get ethernet address\n");
         fprintf(stderr, strerror(errno));
         exit(1);
+    } else if(ioctl(file_descriptor, SIOCGIFINDEX, ethernet) == -1){
+        fprintf(stderr, "Error: Cannot get ethernet index\n");
+        fprintf(stderr, strerror(errno));
+        exit(1);
     } else {
         sprintf(
             source_eth_addr, "%s",
