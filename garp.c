@@ -60,7 +60,7 @@ get_mac_address (unsigned char source_eth_addr[ETHERNET_ADDR_LEN], char* iface,
 				 int *sll_ifindex)
 {
     struct ifreq ethernet;
-    strncpy(ethernet.ifr_name, iface, strlen(iface));
+    strncpy(ethernet.ifr_name, iface, IF_NAMESIZE);
     int file_descriptor = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
 
     if(ioctl(file_descriptor, SIOCGIFHWADDR, &ethernet) == -1) {
