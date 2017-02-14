@@ -148,10 +148,10 @@ main (int argc, char* argv[])
     memset(packet.target_ethernet_address, 0xFF, ETHERNET_ADDR_LEN);
     packet.ethernet_type = htons(ETHERNET_TYPE);
 
-	/* Link layer address data */
+    /* Link layer address data */
     link_address.sll_family = AF_PACKET;
-	link_address.sll_protocol = htons(ETH_P_ARP);
-	link_address.sll_ifindex = ethernet.ifr_ifindex;
+    link_address.sll_protocol = htons(ETH_P_ARP);
+    link_address.sll_ifindex = ethernet.ifr_ifindex;
 
     /* Copy data into ARP packet buffer */
     packet.hardware_type = htons(ETHERNET_ARP_TYPE);
