@@ -142,34 +142,43 @@ main (int argc, char* argv[])
     set_ip(&source_ip_address, argv[2]);
 
     /* Tries to create a socket */
-    socket_fd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_RARP));
+    socket_fd = socket(PF_PACKET, SOCK_RAW, htons(ETH_P_ARP));
     if(socket_fd < 0) {
         fprintf(stderr, "Error on creating socket");
         return EXIT_FAILURE;
     }
 
+
+    link_address.sll_family = AF_PACKET;
+	link_address.sll_protocol = htons(ETH_P_ARP);
+
+    /* Fill data for Ethernet header */
+    get_mac_address(packet.source_ethernet_address, iface, &link_address.sll_ifindex);
+    memset(packet.target_ethernet_address, 0xFF, ETHERNET_ADDR_LEN);
+    packet.ethernet_type = htons(ETHERNET_TYPE);
+
     /* Copy data into ARP packet buffer */
-    packet.hardware_type = htons(ETHERNET_TYPE);
+    packet.hardware_type = htons(ETHERNET_ARP_TYPE);
     packet.protocol_type = htons(IP_TYPE);
     packet.hardware_address_length = ETHERNET_ADDR_LEN;
     packet.protocol_address_length = IP_ADDR_LEN;
     packet.arp_options = htons(REQUEST_OPERATION);
 
     /* Gets the local interface hardware (Ethernet) address */
-    get_mac_address(packet.source_hardware_address, iface);
+    memcpy(packet.source_hardware_address, packet.source_ethernet_address, ETHERNET_ADDR_LEN);
     memcpy(packet.source_protocol_address, &source_ip_address, IP_ADDR_LEN);
 
-    memset(packet.target_hardware_address, 0xFF, ETHERNET_ADDR_LEN);
+    memcpy(packet.target_hardware_address, packet.target_ethernet_address, ETHERNET_ADDR_LEN);
     memcpy(packet.target_protocol_address, &source_ip_address, IP_ADDR_LEN);
 
     /* Just adding extra padding data */
     memset(packet.padding, 0, ARP_PADDING_SIZE);
 
+    /* Sends the packet out */
+    send_gratuitous_arp(socket_fd, &packet, &link_address);
+
     /* Debug hex decimal data */
     print_raw_packet(&packet, sizeof(packet));
-
-    /* Sends the packet out */
-    send_gratuitous_arp(socket_fd, &packet, &socket_address);
 
     /* Closes the socket */
     close(socket_fd);
