@@ -30,6 +30,12 @@
  */
 struct gratuitous_arp {
 
+    /* Ethernet header */
+    unsigned char source_ethernet_address[ETHERNET_ADDR_LEN];
+    unsigned char target_ethernet_address[ETHERNET_ADDR_LEN];
+    unsigned short ethernet_type;
+
+    /* ARP Header */
     unsigned short hardware_type;
     unsigned short protocol_type;
 
@@ -44,6 +50,7 @@ struct gratuitous_arp {
     unsigned char target_hardware_address[ETHERNET_ADDR_LEN];
     unsigned char target_protocol_address[IP_ADDR_LEN];
 
+    /* Extra padding data */
     unsigned char padding[ARP_PADDING_SIZE];
 };
 
