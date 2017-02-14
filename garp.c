@@ -13,25 +13,34 @@
  * ============================================================================
  */
 
+
+/* C standard library */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <errno.h>
 
-#include <netdb.h>
+/* System libraries */
 #include <sys/socket.h>
 #include <sys/ioctl.h>
-#include <arpa/inet.h>
-
 #include <linux/if_ether.h>
-#include <net/if.h>
 #include <linux/if_packet.h>
+
+/* Networking header files */
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <net/if.h>
 #include <net/ethernet.h>
 
+/* Gratuitous ARP */
 #include "garp.h"
 #include "garp_config.h"
 
+
+/**
+ * Prints the Usage message with garp example
+ */
 void
 usage ()
 {
@@ -43,18 +52,30 @@ usage ()
     );
 }
 
+
+/**
+ * Copies the interface name from arguments into buffer
+ */
 void
 set_iface (char iface[25], char *argv_iface)
 {
     strncpy(iface, argv_iface, strlen(argv_iface));
 }
 
+
+/**
+ * Assigns the source IP address from arguments
+ */
 void
 set_ip (struct in_addr* source_addr, char* argv_addr)
 {
     source_addr->s_addr = inet_addr(argv_addr);
 }
 
+
+/**
+ * Gets the MAC address and the index of the given interface using ioctl.
+ */
 void
 get_mac_address (struct ifreq* ethernet, char* iface,
                  unsigned char source_eth_addr[ETHERNET_ADDR_LEN])
@@ -62,12 +83,15 @@ get_mac_address (struct ifreq* ethernet, char* iface,
     strncpy(ethernet->ifr_name, iface, IF_NAMESIZE);
     int file_descriptor = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
 
+    /* Copies the MAC address into ethernet ifreq struct object */
     if(ioctl(file_descriptor, SIOCGIFHWADDR, ethernet) == -1) {
-        fprintf(stderr, "Error: Cannot get ethernet address\n");
+        fprintf(stderr, "Error: Cannot get ethernet address: ");
         fprintf(stderr, strerror(errno));
         exit(1);
+
+    /* Copies the interface index into ethernet ifreq struct object */
     } else if(ioctl(file_descriptor, SIOCGIFINDEX, ethernet) == -1){
-        fprintf(stderr, "Error: Cannot get ethernet index\n");
+        fprintf(stderr, "Error: Cannot get ethernet index: ");
         fprintf(stderr, strerror(errno));
         exit(1);
     } else {
@@ -76,14 +100,18 @@ get_mac_address (struct ifreq* ethernet, char* iface,
             (unsigned char *) ethernet->ifr_hwaddr.sa_data
         );
     }
+
     close(file_descriptor);
 }
 
+
+/**
+ * Function used for printing the raw hexdecimal packet data
+ */
 void
 print_raw_packet (struct gratuitous_arp *packet, unsigned int packet_len)
 {
     char buffer[packet_len];
-
     memcpy(buffer, packet, packet_len);
 
     for(int i = 0; i < packet_len; i++) {
@@ -92,6 +120,10 @@ print_raw_packet (struct gratuitous_arp *packet, unsigned int packet_len)
     fprintf(stdout, "\n");
 }
 
+
+/**
+ * Sends the packet to a socket using sendto.
+ */
 void
 send_gratuitous_arp (int socket_fd, struct gratuitous_arp* arp,
                      struct sockaddr_ll* addr)
@@ -105,6 +137,10 @@ send_gratuitous_arp (int socket_fd, struct gratuitous_arp* arp,
     }
 }
 
+
+/**
+ * Main execution of the Gratuitous ARP program
+ */
 int
 main (int argc, char* argv[])
 {
@@ -157,27 +193,28 @@ main (int argc, char* argv[])
     link_address.sll_protocol = htons(ETH_P_ARP);
     link_address.sll_ifindex = ethernet.ifr_ifindex;
 
-    /* Copy data into ARP packet buffer */
+    /* Copy data into ARP packet struct */
     packet.hardware_type = htons(ETHERNET_ARP_TYPE);
     packet.protocol_type = htons(IP_TYPE);
     packet.hardware_address_length = ETHERNET_ADDR_LEN;
     packet.protocol_address_length = IP_ADDR_LEN;
     packet.arp_options = htons(REQUEST_OPERATION);
 
-    /* Gets the local interface hardware (Ethernet) address */
+    /* Gets the local interface hardware (Ethernet) and protocol  address */
     memcpy(packet.source_hardware_address, packet.source_ethernet_address, ETHERNET_ADDR_LEN);
     memcpy(packet.source_protocol_address, &source_ip_address, IP_ADDR_LEN);
 
+    /* Copies the target  hardware (Ethernet) and protocol  address */
     memcpy(packet.target_hardware_address, packet.target_ethernet_address, ETHERNET_ADDR_LEN);
     memcpy(packet.target_protocol_address, &source_ip_address, IP_ADDR_LEN);
 
-    /* Just adding extra padding data */
+    /* Just adding extra padding data to complete packet size */
     memset(packet.padding, 0, ARP_PADDING_SIZE);
 
     /* Sends the packet out */
     send_gratuitous_arp(socket_fd, &packet, &link_address);
 
-    /* Debug hex decimal data */
+    /* Prints hexdecimal packet data */
     print_raw_packet(&packet, sizeof(packet));
 
     /* Closes the socket */
