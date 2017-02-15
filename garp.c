@@ -91,8 +91,26 @@ get_mac_address (struct ifreq* ethernet, char* iface,
         exit(1);
     }
 
+    sprintf(
+        source_eth_addr, "%s",
+        (unsigned char *) ethernet->ifr_hwaddr.sa_data
+    );
+
+    close(file_descriptor);
+}
+
+
+/**
+ * Gets the interface index using ioctl
+ */
+void
+get_iface_index (struct ifreq* ethernet, char* iface)
+{
+    int file_descriptor = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
+
     struct ifreq tmp_ethernet;
     strncpy(tmp_ethernet.ifr_name, iface, IF_NAMESIZE);
+
     /* Copies the interface index into ethernet ifreq struct object */
     if(ioctl(file_descriptor, SIOCGIFINDEX, &tmp_ethernet) == -1){
         fprintf(stderr, "Error: Cannot get ethernet index: ");
@@ -100,16 +118,10 @@ get_mac_address (struct ifreq* ethernet, char* iface,
         exit(1);
     }
 
-    sprintf(
-        source_eth_addr, "%s",
-        (unsigned char *) ethernet->ifr_hwaddr.sa_data
-    );
-
     ethernet->ifr_ifindex = tmp_ethernet.ifr_ifindex;
 
     close(file_descriptor);
 }
-
 
 /**
  * Function used for printing the raw hexdecimal packet data
