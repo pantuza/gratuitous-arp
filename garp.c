@@ -80,8 +80,9 @@ void
 get_mac_address (struct ifreq* ethernet, char* iface,
                  unsigned char source_eth_addr[ETHERNET_ADDR_LEN])
 {
-    strncpy(ethernet->ifr_name, iface, IF_NAMESIZE);
     int file_descriptor = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
+
+    strncpy(ethernet->ifr_name, iface, IF_NAMESIZE);
 
     /* Copies the MAC address into ethernet ifreq struct object */
     if(ioctl(file_descriptor, SIOCGIFHWADDR, ethernet) == -1) {
