@@ -204,6 +204,7 @@ main (int argc, char* argv[])
 
     /* Fill data for Ethernet header */
     get_mac_address(&ethernet, iface, packet.source_ethernet_address);
+    get_iface_index(&ethernet, iface);
     memset(packet.target_ethernet_address, 0xFF, ETHERNET_ADDR_LEN);
     packet.ethernet_type = htons(ETHERNET_TYPE);
 
