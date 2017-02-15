@@ -88,18 +88,23 @@ get_mac_address (struct ifreq* ethernet, char* iface,
         fprintf(stderr, "Error: Cannot get ethernet address: ");
         fprintf(stderr, strerror(errno));
         exit(1);
+    }
 
+    struct ifreq tmp_ethernet;
+    strncpy(tmp_ethernet.ifr_name, iface, IF_NAMESIZE);
     /* Copies the interface index into ethernet ifreq struct object */
-    } else if(ioctl(file_descriptor, SIOCGIFINDEX, ethernet) == -1){
+    if(ioctl(file_descriptor, SIOCGIFINDEX, &tmp_ethernet) == -1){
         fprintf(stderr, "Error: Cannot get ethernet index: ");
         fprintf(stderr, strerror(errno));
         exit(1);
-    } else {
-        sprintf(
-            source_eth_addr, "%s",
-            (unsigned char *) ethernet->ifr_hwaddr.sa_data
-        );
     }
+
+    sprintf(
+        source_eth_addr, "%s",
+        (unsigned char *) ethernet->ifr_hwaddr.sa_data
+    );
+
+    ethernet->ifr_ifindex = tmp_ethernet.ifr_ifindex;
 
     close(file_descriptor);
 }
