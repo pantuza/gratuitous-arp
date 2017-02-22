@@ -21,3 +21,7 @@ $> cmake ..
 $> make
 ```
 This will generate the binary file **garp**
+
+### Contributing
+
+Just fork, modify and send a pull request.
