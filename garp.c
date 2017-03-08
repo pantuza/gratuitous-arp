@@ -114,7 +114,7 @@ get_iface_index (struct ifreq* ethernet, char* iface)
     /* Copies the interface index into ethernet ifreq struct object */
     if(ioctl(file_descriptor, SIOCGIFINDEX, &tmp_ethernet) == -1){
         fprintf(stderr, "Error: Cannot get ethernet index: ");
-        fprintf(stderr, strerror(errno));
+        fprintf(stderr, "%s", strerror(errno));
         exit(1);
     }
 
@@ -151,7 +151,7 @@ send_gratuitous_arp (int socket_fd, struct gratuitous_arp* arp,
 
     if(sent < 0) {
         fprintf(stderr, "Error on sending packet: ");
-        fprintf(stderr, strerror(errno));
+        fprintf(stderr, "%s", strerror(errno));
         exit(EXIT_FAILURE);
     }
 }
