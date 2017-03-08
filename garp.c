@@ -87,13 +87,13 @@ get_mac_address (struct ifreq* ethernet, char* iface,
     /* Copies the MAC address into ethernet ifreq struct object */
     if(ioctl(file_descriptor, SIOCGIFHWADDR, ethernet) == -1) {
         fprintf(stderr, "Error: Cannot get ethernet address: ");
-        fprintf(stderr, strerror(errno));
+        fprintf(stderr, "%s", strerror(errno));
         exit(1);
     }
 
     sprintf(
-        source_eth_addr, "%s",
-        (unsigned char *) ethernet->ifr_hwaddr.sa_data
+        (char *) source_eth_addr, "%s",
+        (char *) ethernet->ifr_hwaddr.sa_data
     );
 
     close(file_descriptor);
