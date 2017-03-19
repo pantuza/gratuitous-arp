@@ -133,6 +133,12 @@ print_raw_packet (struct gratuitous_arp *packet, unsigned int packet_len)
     memcpy(buffer, packet, packet_len);
 
     for(int i = 0; i < packet_len; i++) {
+
+        /* Breaks line for each 32 bits size */
+        if(!(i % 4)) {
+            fprintf(stdout, "\n");
+        }
+
         fprintf(stdout, "%.2X ", buffer[i] & 0xff);
     }
     fprintf(stdout, "\n");
