@@ -22,6 +22,8 @@ $> make
 ```
 This will generate the binary file **garp**
 
+> This project only compiles on Linux based systems.
+
 ### Address Resolution Protocol - ARP
 ARP protocol maps layer 3 addresses to layer 2 addresses. A layer 3 address could be IP (IPv4) and a layer 2 address could be Ethernet (MAC address).
 ARP enables a host to know which other host (MAC address) respondes to a given IP on a local area network. Also the inverse operation.
